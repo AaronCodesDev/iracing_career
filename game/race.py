@@ -1,18 +1,27 @@
-def correr_carrera(piloto, carrera, posicion, incidentes, equipos_disponibles):
-    piloto.dinero -= carrera.coste_inscripcion
-    recompensa = max(carrera.recompensa_max - (posicion - 1) * 50, 0)
-    piloto.dinero += recompensa
-    piloto.dinero -= sum(incidentes)
+from core.rules import RACE_REWARD_PER_POSITION, INCIDENT_PENALTY_MULTIPLIER, LEVEL_UP_THRESHOLD, POLE_POSITION_BONUS
 
-    if piloto.dinero > 2000:
-        piloto.nivel += 1
-
-    # Intentar fichaje
-    for equipo in equipos_disponibles:
-        if piloto.nivel >= equipo.nivel_minimo and piloto.equipo_id is None:
-            piloto.equipo_id = equipo.id
-            piloto.dinero += equipo.bonus_fichaje
-            print(f"🎉 {piloto.nombre} ha sido fichado por {equipo.nombre} +${equipo.bonus_fichaje}")
+def run_race(driver, race, position, incidents, available_teams, pole_position=False):
+    
+    if pole_position:
+        driver.money += POLE_POSITION_BONUS
+        print(f"🏆 {driver.name} received a pole position bonus of +${POLE_POSITION_BONUS}")
+    
+    # Deduct entry fee
+    driver.money -= race.entry_fee
+    
+    reward = max(race.max_reward - (position - 1) * RACE_REWARD_PER_POSITION, 0)
+    driver.money += reward
+    
+    driver.money -= sum(incidents)  * INCIDENT_PENALTY_MULTIPLIER # Each incident has a cost equal to its severity
+    
+    if driver.money > LEVEL_UP_THRESHOLD:
+        driver.level += 1
+        
+    for team in available_teams:
+        if driver.level>=team.min_level and driver.team_id is None:
+            driver.team.id = team.id
+            driver.money += team.signing_bonus
+            print(f"🎉 {driver.name} has been signed by {team.name} +${team.signing_bonus}")
             break
-
-    return piloto
+        
+    return driver

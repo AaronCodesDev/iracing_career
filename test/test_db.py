@@ -24,9 +24,9 @@ teams = [team1, team2]
 # Run a race for driver
 driver = run_race(
     driver,
-    race = type('Race', (), {'entry_fee': 100, 'max_rewards':500})(),
+    race = type('Race', (), {'entry_fee': 100, 'max_reward':500})(),
     position = 2,
-    incidents = [17],
+    incidents = [50],
     available_teams = teams
 )
 

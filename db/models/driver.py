@@ -11,6 +11,6 @@ class Driver(Base):
     money = Column(Integer, default=1000)
     level = Column(Integer, default=1)
 
-    # Nuevo: relación con equipos
-    team_id = Column(String, ForeignKey("equipos.id"), nullable=True)
+    # Relationship with Team
+    team_id = Column(String, ForeignKey("teams.id"), nullable=True)
     team = relationship("Team", back_populates="drivers")

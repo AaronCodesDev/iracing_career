@@ -3,13 +3,13 @@ from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 from db.base import Base
 
-class Equipo(Base):
-    __tablename__ = "equipos"
+class Team(Base):
+    __tablename__ = "teams"
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    nombre = Column(String, nullable=False)
-    bonus_fichaje = Column(Integer, default=200)  # dinero extra al fichar
-    nivel_minimo = Column(Integer, default=1)     # nivel mínimo para fichar
+    name = Column(String, nullable=False)
+    signing_bonus = Column(Integer, default=200)  # extra money when signing a driver
+    min_level = Column(Integer, default=1)       # minimum level to sign
 
-    # Relación inversa con pilotos
-    pilotos = relationship("Piloto", back_populates="equipo")
+    # Inverse relationship with Drivers
+    drivers = relationship("Driver", back_populates="team")
